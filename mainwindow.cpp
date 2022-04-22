@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
   this->setCentralWidget(ui->plainTextEdit);
   QDockWidget *dockWidget = new QDockWidget(tr("Dock Widget"), this);
   dockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+  dockWidget->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
   dockWidget->setWidget(ui->fileExplorerTreeWidget);
   dockWidget->setWindowTitle("File Explorer");
   addDockWidget(Qt::LeftDockWidgetArea, dockWidget);
