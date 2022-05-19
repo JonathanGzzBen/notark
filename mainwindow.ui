@@ -22,15 +22,6 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QTreeWidget" name="fileExplorerTreeWidget">
-      <column>
-       <property name="text">
-        <string notr="true">1</string>
-       </property>
-      </column>
-     </widget>
-    </item>
-    <item>
      <widget class="QMarkdownTextEdit" name="plainTextEdit"/>
     </item>
    </layout>
