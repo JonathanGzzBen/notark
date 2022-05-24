@@ -28,6 +28,7 @@ class MainWindow : public QMainWindow {
   Ui::MainWindow *ui;
   QFileSystemModel *fileSystemModel = new QFileSystemModel;
   QTreeView *fileSystemTree = new QTreeView(this);
+  QString workingDirectory;
 
   static void configureFileExplorerDockWidgetAreasAndFeatures(
       QDockWidget *dockWidget);

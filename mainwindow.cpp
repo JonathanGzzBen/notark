@@ -26,30 +26,42 @@ MainWindow::MainWindow(QWidget* parent)
   fileExplorerDockWidget->setWidget(fileSystemTree);
   fileExplorerDockWidget->setWindowTitle("File Explorer");
   addDockWidget(Qt::LeftDockWidgetArea, fileExplorerDockWidget);
-  connect(fileSystemTree->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::fileSelected);
+  connect(fileSystemTree->selectionModel(),
+          &QItemSelectionModel::selectionChanged, this,
+          &MainWindow::fileSelected);
 }
 
 MainWindow::~MainWindow() { delete ui; }
 
 void MainWindow::on_actionOpen_triggered() {
-  QString path{QFileDialog::getExistingDirectory(this, "Select a directory")};
-  fileSystemTree->setRootIndex(fileSystemModel->setRootPath(path));
+  workingDirectory =
+      QFileDialog::getExistingDirectory(this, "Select a directory");
+  fileSystemTree->setRootIndex(fileSystemModel->setRootPath(workingDirectory));
 }
 
 void MainWindow::on_actionExit_triggered() { QApplication::quit(); }
 
-void MainWindow::configureFileExplorerDockWidgetAreasAndFeatures(QDockWidget* dockWidget) {
+void MainWindow::configureFileExplorerDockWidgetAreasAndFeatures(
+    QDockWidget* dockWidget) {
   dockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
   dockWidget->setFeatures(QDockWidget::DockWidgetMovable |
                           QDockWidget::DockWidgetFloatable);
 }
 
-void MainWindow::fileSelected(
-    const QItemSelection &news, // not used
-    const QItemSelection &olds)
-{
-  auto index = fileSystemTree->currentIndex();
-  auto data = fileSystemTree->model()->data(index);
-  auto dataString = data.toString();
-  ui->plainTextEdit->setText(dataString);
+void MainWindow::fileSelected(const QItemSelection& news,  // not used
+                              const QItemSelection& olds) {
+  auto model = static_cast<QFileSystemModel>(fileSystemTree->model());
+  auto path{model.filePath(fileSystemTree->currentIndex())};
+  if (!path.endsWith(".md")) return;
+  if (QFileInfo fileinfo{path}; fileinfo.isDir()) return;
+
+  QFile file{path};
+  if (!file.open(QIODevice::ReadOnly)) {
+    QMessageBox::warning(this, "Could not open file " + path,
+                         file.errorString());
+    return;
+  }
+  QTextStream stream{&file};
+  ui->plainTextEdit->setText(stream.readAll());
+  file.close();
 }
