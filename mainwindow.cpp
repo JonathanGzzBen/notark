@@ -38,3 +38,9 @@ void MainWindow::on_actionOpen_triggered() {
   msgBox.setText("Hello");
   msgBox.exec();
 }
+
+void MainWindow::on_actionExit_triggered()
+{
+  QApplication::quit();
+}
+
