@@ -1,7 +1,10 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QDockWidget>
+#include <QFileSystemModel>
 #include <QMainWindow>
+#include <QTreeView>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -23,5 +26,9 @@ class MainWindow : public QMainWindow {
 
  private:
   Ui::MainWindow *ui;
+  QFileSystemModel *fileSystemModel = new QFileSystemModel;
+  QTreeView *fileSystemTree = new QTreeView(this);
+
+  static void configureFileExplorerDockWidgetAreasAndFeatures(QDockWidget* dockWidget);
 };
 #endif  // MAINWINDOW_H
