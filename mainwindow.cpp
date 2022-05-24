@@ -2,6 +2,7 @@
 
 #include <QDockWidget>
 #include <QFileSystemModel>
+#include <QMessageBox>
 #include <QTreeView>
 
 #include "qheaderview.h"
@@ -16,16 +17,24 @@ MainWindow::MainWindow(QWidget *parent)
   fileSystemModel->setRootPath(QDir::currentPath());
   auto fileSystemTree = new QTreeView(this);
   fileSystemTree->setModel(fileSystemModel);
-  for(int i{1}; i < fileSystemTree->header()->count(); i++) {
+  for (int i{1}; i < fileSystemTree->header()->count(); i++) {
     fileSystemTree->header()->hideSection(i);
   }
 
   auto fileExplorerDockWidget = new QDockWidget(this);
-  fileExplorerDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-  fileExplorerDockWidget->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
+  fileExplorerDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea |
+                                          Qt::RightDockWidgetArea);
+  fileExplorerDockWidget->setFeatures(QDockWidget::DockWidgetMovable |
+                                      QDockWidget::DockWidgetFloatable);
   fileExplorerDockWidget->setWidget(fileSystemTree);
   fileExplorerDockWidget->setWindowTitle("File Explorer");
   addDockWidget(Qt::LeftDockWidgetArea, fileExplorerDockWidget);
 }
 
 MainWindow::~MainWindow() { delete ui; }
+
+void MainWindow::on_actionOpen_triggered() {
+  QMessageBox msgBox;
+  msgBox.setText("Hello");
+  msgBox.exec();
+}
