@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget* parent)
   fileExplorerDockWidget->setWidget(fileSystemTree);
   fileExplorerDockWidget->setWindowTitle("File Explorer");
   addDockWidget(Qt::LeftDockWidgetArea, fileExplorerDockWidget);
+  connect(fileSystemTree->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::fileSelected);
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -33,7 +34,6 @@ MainWindow::~MainWindow() { delete ui; }
 void MainWindow::on_actionOpen_triggered() {
   QString path{QFileDialog::getExistingDirectory(this, "Select a directory")};
   fileSystemTree->setRootIndex(fileSystemModel->setRootPath(path));
-  ui->plainTextEdit->setPlainText(path);
 }
 
 void MainWindow::on_actionExit_triggered() { QApplication::quit(); }
@@ -42,4 +42,14 @@ void MainWindow::configureFileExplorerDockWidgetAreasAndFeatures(QDockWidget* do
   dockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
   dockWidget->setFeatures(QDockWidget::DockWidgetMovable |
                           QDockWidget::DockWidgetFloatable);
+}
+
+void MainWindow::fileSelected(
+    const QItemSelection &news, // not used
+    const QItemSelection &olds)
+{
+  auto index = fileSystemTree->currentIndex();
+  auto data = fileSystemTree->model()->data(index);
+  auto dataString = data.toString();
+  ui->plainTextEdit->setText(dataString);
 }

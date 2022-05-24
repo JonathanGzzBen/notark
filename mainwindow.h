@@ -29,6 +29,9 @@ class MainWindow : public QMainWindow {
   QFileSystemModel *fileSystemModel = new QFileSystemModel;
   QTreeView *fileSystemTree = new QTreeView(this);
 
-  static void configureFileExplorerDockWidgetAreasAndFeatures(QDockWidget* dockWidget);
+  static void configureFileExplorerDockWidgetAreasAndFeatures(
+      QDockWidget *dockWidget);
+  void fileSelected(const QItemSelection &news,  // not used
+                    const QItemSelection &olds);
 };
 #endif  // MAINWINDOW_H
