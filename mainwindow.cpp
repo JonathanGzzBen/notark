@@ -48,8 +48,8 @@ void MainWindow::configureFileExplorerDockWidgetAreasAndFeatures(
                           QDockWidget::DockWidgetFloatable);
 }
 
-void MainWindow::fileSelected(const QItemSelection& news,  // not used
-                              const QItemSelection& olds) {
+void MainWindow::fileSelected(const QItemSelection&,  // not used
+                              const QItemSelection&) {
   auto model = static_cast<QFileSystemModel>(fileSystemTree->model());
   auto path{model.filePath(fileSystemTree->currentIndex())};
   if (!path.endsWith(".md")) return;
@@ -63,5 +63,6 @@ void MainWindow::fileSelected(const QItemSelection& news,  // not used
   }
   QTextStream stream{&file};
   ui->plainTextEdit->setText(stream.readAll());
+  ui->statusbar->showMessage(path);
   file.close();
 }
