@@ -24,11 +24,14 @@ class MainWindow : public QMainWindow {
 
   void on_actionExit_triggered();
 
+  void on_actionSave_triggered();
+
  private:
   Ui::MainWindow *ui;
   QFileSystemModel *fileSystemModel = new QFileSystemModel;
   QTreeView *fileSystemTree = new QTreeView(this);
   QString workingDirectory;
+  QString openFilePath;
 
   static void configureFileExplorerDockWidgetAreasAndFeatures(
       QDockWidget *dockWidget);

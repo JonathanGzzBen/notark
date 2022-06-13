@@ -48,12 +48,24 @@ void MainWindow::configureFileExplorerDockWidgetAreasAndFeatures(
                           QDockWidget::DockWidgetFloatable);
 }
 
+void MainWindow::on_actionSave_triggered()
+{
+  QFile outFile{openFilePath};
+  if (!outFile.open(QIODevice::WriteOnly)) {
+    QMessageBox::warning(this, "Could not write file " + openFilePath, outFile.errorString());
+  }
+  QTextStream outStream{&outFile};
+  outStream << ui->plainTextEdit->toPlainText();
+  return;
+}
+
 void MainWindow::fileSelected(const QItemSelection&,  // not used
                               const QItemSelection&) {
   auto model = static_cast<QFileSystemModel>(fileSystemTree->model());
   auto path{model.filePath(fileSystemTree->currentIndex())};
   if (!path.endsWith(".md")) return;
   if (QFileInfo fileinfo{path}; fileinfo.isDir()) return;
+  ui->plainTextEdit->setReadOnly(false);
 
   QFile file{path};
   if (!file.open(QIODevice::ReadOnly)) {
@@ -61,8 +73,11 @@ void MainWindow::fileSelected(const QItemSelection&,  // not used
                          file.errorString());
     return;
   }
+  openFilePath = path;
   QTextStream stream{&file};
   ui->plainTextEdit->setText(stream.readAll());
   ui->statusbar->showMessage(path);
   file.close();
 }
+
+
